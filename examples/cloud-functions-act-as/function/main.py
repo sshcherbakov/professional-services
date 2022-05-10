@@ -102,24 +102,3 @@ def main(request):
         err_msg = f"Error: { exp }"
         print(err_msg)
         return err_msg
-
-
-# def main():
-#     """
-#     Main function when called from the command line
-#     """
-#     access_token = None
-#     if len(sys.argv) > 1:
-#         access_token = sys.argv[1]
-#     print(f"Access Token: { access_token }")
-
-#     gcp_project = os.environ.get('GCP_PROJECT', '')
-#     gcp_zone = os.environ.get('GCP_ZONE', '')
-#     try:
-#         list_instances(gcp_project, gcp_zone, access_token)
-#     except Exception as exp:
-#         print(f"Error: { exp }")
-
-
-# if __name__ == '__main__':
-#     main()
