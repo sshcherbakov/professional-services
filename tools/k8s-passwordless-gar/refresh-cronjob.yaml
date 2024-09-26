@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: refresh-access-token
+spec:
+  schedule: "0/5 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccount: default
+          containers:
+          - name: refresher
+            image: europe-west3-docker.pkg.dev/sshsergey-main/wif-test/access-token-refresher:latest
+            env:
+            - name: PROJECT_NUMBER
+              value: "861675023757"
+            - name: POOL_ID
+              value: k8s-wif
+            - name: PROVIDER_ID
+              value: k8s-wif-provider
+            - name: SERVER_NAME
+              value: europe-west3-docker.pkg.dev
+            - name: USER_NAME
+              value: oauth2accesstoken
+            imagePullPolicy: Always
+            volumeMounts:
+            - name: oidc-token
+              mountPath: /var/run/secrets/tokens
+          restartPolicy: OnFailure
+          imagePullSecrets: 
+          - name: regcred
+          volumes:
+          - name: oidc-token
+            projected:
+              sources:
+              - serviceAccountToken:
+                  path: oidc-token
+                  # The audience retrieved from the GCP pool configuration
+                  audience: "https://iam.googleapis.com/projects/861675023757/locations/global/workloadIdentityPools/k8s-wif/providers/k8s-wif-provider"
+                  expirationSeconds: 4800

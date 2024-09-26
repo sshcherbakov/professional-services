@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: refresher-config
+data:
+  PROJECT_NUMBER: "861675023757"
+  POOL_ID: k8s-wif
+  PROVIDER_ID: k8s-wif-provider
+  SERVER_NAME: europe-west3-docker.pkg.dev
+  USER_NAME: oauth2accesstoken
